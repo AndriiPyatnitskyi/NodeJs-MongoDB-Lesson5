@@ -1,5 +1,6 @@
 import {Request, Response} from 'express';
 import * as fs from 'fs';
+import {Role} from "../dto/account";
 // import {Role, Account} from "../dto/account";
 
 const jwt = require("jsonwebtoken");
@@ -24,26 +25,26 @@ const getAccountById: any = async (req: Request, res: Response) => {
     }
 };
 
-// const createAccount: any = async (req: Request, res: Response) => {
-//     if (!req.body) return res.sendStatus(400);
-//
-//     const accountName: String = req.body.name;
-//     const accountRole: Role = req.body.role;
-//
-//     const role = accountRole ? accountRole : Role.USER;
-//
-//     const token = jwt.sign(
-//         {account_name: accountName, role: accountRole},
-//         secretKey,
-//         {
-//             expiresIn: "2h",
-//         }
-//     );
-//
-//     const result = await models.default.AccountModel.create({name: accountName, token: token, role: role});
-//
-//     res.send(result);
-// };
+const createAccount: any = async (req: Request, res: Response) => {
+    if (!req.body) return res.sendStatus(400);
+
+    const accountName: String = req.body.name;
+    const accountRole: Role = req.body.role;
+
+    const role = accountRole ? accountRole : Role.USER;
+
+    const token = jwt.sign(
+        {account_name: accountName, role: accountRole},
+        secretKey,
+        {
+            expiresIn: "2h",
+        }
+    );
+
+    const result = await Account.default.create({name: accountName, token: token, role: role});
+
+    res.send(result);
+};
 //
 // const updateAccount: any = async (req: Request, res: Response) => {
 //     if (!req.body) return res.sendStatus(400);
@@ -186,9 +187,9 @@ const getAccountById: any = async (req: Request, res: Response) => {
 
 export default {
     getAccounts,
-    getAccountById
+    getAccountById,
+    createAccount
     // ,
-    // createAccount,
     // updateAccount,
     // deleteAccount,
     // getAccountTokensByAccountId,
