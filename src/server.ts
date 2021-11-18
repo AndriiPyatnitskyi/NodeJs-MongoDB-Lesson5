@@ -4,49 +4,21 @@ import morgan from 'morgan';
 import accountRouter from './routes/accounts';
 import tokenRouter from './routes/tokens';
 import swaggerUi from 'swagger-ui-express';
-import * as path from "path";
 const mongoose = require("mongoose");
-
-
-// const Sequelize = require('sequelize');
-// const accountModel = require("./model/account");
 
 const swaggerDocument = require('./swagger.json');
 const app: Express = express();
 
 /** Init DB */
-// const connection = new Sequelize('postgres://habrpguser:pgpwd4habr@localhost:5432/habrdb') // Example for postgres
-
-// connection.authenticate()
-//     .then(() => {
-//     console.log('Connection has been established successfully.');
-// }).catch((err: any) => {
-//     console.error('Unable to connect to the database:', err);
-// });
-//
-// Init tables
-// const AccountModel = accountModel(connection);
-
-// AccountModel.sync();
-
-// load models
-
-// const models = {
-//     AccountModel: require(path.join(__dirname, './model/account'))(connection, Sequelize.DataTypes),
-//     sequelize: connection,
-//     Sequelize: Sequelize
-// }
 
 const Schema = mongoose.Schema;
 
-// установка схемы
 const userScheme = new Schema({
     name: String,
     token: String,
     role: String
 });
 
-// подключение
 mongoose.connect("mongodb://localhost:27017/usersdb", { useUnifiedTopology: true, useNewUrlParser: true });
 
 const Account = mongoose.model("Account", userScheme);

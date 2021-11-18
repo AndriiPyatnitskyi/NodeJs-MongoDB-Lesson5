@@ -15,10 +15,7 @@ const getAccounts: any = async (req: Request, res: Response) => {
 };
 
 const getAccountById: any = async (req: Request, res: Response) => {
-    console.log(req.params.id);
     const result = await Account.default.findById(req.params.id);
-
-    console.log(result);
 
     if (result) {
         res.send(result);
@@ -52,12 +49,8 @@ const updateAccount: any = async (req: Request, res: Response) => {
 
     if (!req.body) return res.sendStatus(400);
 
-    console.log("name:", req.body.name);
-
     await Account.default.findByIdAndUpdate(req.params.id, {name : req.body.name})
     const result = await Account.default.findById(req.params.id);
-    console.log("account:", result);
-
 
     if (result) {
         res.send(result);
