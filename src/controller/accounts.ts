@@ -55,7 +55,7 @@ const updateAccount: any = async (req: Request, res: Response) => {
     console.log("name:", req.body.name);
 
     await Account.default.findByIdAndUpdate(req.params.id, {name : req.body.name})
-    const result = await Account.default.findById(req.params.id)
+    const result = await Account.default.findById(req.params.id);
     console.log("account:", result);
 
 
@@ -75,16 +75,16 @@ const deleteAccount: any = async (req: Request, res: Response) => {
         res.status(404).send();
     }
 };
-//
-// const getAccountTokensByAccountId: any = async (req: Request, res: Response) => {
-//     const result = await models.default.AccountModel.findByPk(req.params.id);
-//
-//     if (result) {
-//         res.send(result.token);
-//     } else {
-//         res.status(404).send();
-//     }
-// };
+
+const getAccountTokensByAccountId: any = async (req: Request, res: Response) => {
+    const result = await Account.default.findById(req.params.id);
+
+    if (result) {
+        res.send(result.token);
+    } else {
+        res.status(404).send();
+    }
+};
 //
 // const createAccountToken: any = async (req: Request, res: Response) => {
 //     if (!req.body) return res.sendStatus(400);
@@ -185,9 +185,9 @@ export default {
     getAccountById,
     createAccount,
     updateAccount,
-    deleteAccount
+    deleteAccount,
+    getAccountTokensByAccountId
     // ,
-    // getAccountTokensByAccountId,
     // createAccountToken,
     // updateAccountToken,
     // deleteAccountToken
