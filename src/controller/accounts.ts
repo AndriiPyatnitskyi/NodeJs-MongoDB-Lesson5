@@ -66,20 +66,15 @@ const updateAccount: any = async (req: Request, res: Response) => {
     }
 };
 
-// const deleteAccount: any = async (req: Request, res: Response) => {
-//     let result = await models.default.AccountModel.destroy(
-//         {
-//             where: {
-//                 id: req.params.id
-//             }
-//         });
-//
-//     if (result == 1) {
-//         res.sendStatus(204);
-//     } else {
-//         res.status(404).send();
-//     }
-// };
+const deleteAccount: any = async (req: Request, res: Response) => {
+    let result = await Account.default.findByIdAndRemove(req.params.id);
+
+    if (result) {
+        res.sendStatus(204);
+    } else {
+        res.status(404).send();
+    }
+};
 //
 // const getAccountTokensByAccountId: any = async (req: Request, res: Response) => {
 //     const result = await models.default.AccountModel.findByPk(req.params.id);
@@ -189,9 +184,9 @@ export default {
     getAccounts,
     getAccountById,
     createAccount,
-    updateAccount
+    updateAccount,
+    deleteAccount
     // ,
-    // deleteAccount,
     // getAccountTokensByAccountId,
     // createAccountToken,
     // updateAccountToken,
