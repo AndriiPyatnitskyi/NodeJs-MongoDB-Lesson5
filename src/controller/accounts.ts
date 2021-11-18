@@ -10,13 +10,15 @@ const Account = require("../server");
 const filePath = "./accounts.json";
 
 const getAccounts: any = async (req: Request, res: Response) => {
-    // const result = await models.default.AccountModel.findAll();
     let find = await Account.default.find();
     res.send(find);
 };
 
 const getAccountById: any = async (req: Request, res: Response) => {
-    const result = await Account.default.findOne({id: req.params.id});
+    console.log(req.params.id);
+    const result = await Account.default.findById(req.params.id);
+
+    console.log(result);
 
     if (result) {
         res.send(result);
@@ -45,27 +47,25 @@ const createAccount: any = async (req: Request, res: Response) => {
 
     res.send(result);
 };
-//
-// const updateAccount: any = async (req: Request, res: Response) => {
-//     if (!req.body) return res.sendStatus(400);
-//
-//     let result = await models.default.AccountModel.update(
-//         {
-//             name: req.body.name
-//         },
-//         {
-//             where: {
-//                 id: req.params.id
-//             }
-//         });
-//
-//     if (result == 1) {
-//         res.send(await models.default.AccountModel.findByPk(req.params.id));
-//     } else {
-//         res.status(404).send(req.params.id);
-//     }
-// };
-//
+
+const updateAccount: any = async (req: Request, res: Response) => {
+
+    if (!req.body) return res.sendStatus(400);
+
+    console.log("name:", req.body.name);
+
+    await Account.default.findByIdAndUpdate(req.params.id, {name : req.body.name})
+    const result = await Account.default.findById(req.params.id)
+    console.log("account:", result);
+
+
+    if (result) {
+        res.send(result);
+    } else {
+        res.status(404).send(req.params.id);
+    }
+};
+
 // const deleteAccount: any = async (req: Request, res: Response) => {
 //     let result = await models.default.AccountModel.destroy(
 //         {
@@ -188,9 +188,9 @@ const createAccount: any = async (req: Request, res: Response) => {
 export default {
     getAccounts,
     getAccountById,
-    createAccount
+    createAccount,
+    updateAccount
     // ,
-    // updateAccount,
     // deleteAccount,
     // getAccountTokensByAccountId,
     // createAccountToken,
