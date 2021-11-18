@@ -85,38 +85,33 @@ const getAccountTokensByAccountId: any = async (req: Request, res: Response) => 
         res.status(404).send();
     }
 };
-//
-// const createAccountToken: any = async (req: Request, res: Response) => {
-//     if (!req.body) return res.sendStatus(400);
-//
-//     const account = await models.default.AccountModel.findByPk(req.params.id);
-//
-//     if (!account) {
-//         res.status(404).send(req.params.id);
-//     }
-//
-//     const updated = await models.default.AccountModel.update(
-//         {
-//             token: jwt.sign(
-//                 {account_name: account.name},
-//                 secretKey,
-//                 {
-//                     expiresIn: "2h",
-//                 }
-//             )
-//         },
-//         {
-//             where: {
-//                 id: req.params.id
-//             }
-//         });
-//
-//     if (updated == 1) {
-//         res.send(await models.default.AccountModel.findByPk(req.params.id));
-//     } else {
-//         res.sendStatus(500);
-//     }
-// };
+
+const createAccountToken: any = async (req: Request, res: Response) => {
+    if (!req.body) return res.sendStatus(400);
+
+    const account = await Account.default.findById(req.params.id);
+
+    if (!account) {
+        res.status(404).send(req.params.id);
+    }
+
+    await Account.default.findByIdAndUpdate(req.params.id,
+        {token: jwt.sign(
+                {account_name: account.name},
+                secretKey,
+                {
+                    expiresIn: "2h",
+                }
+            )});
+
+    let result = await Account.default.findById(req.params.id, 'token');
+
+    if (result) {
+        res.send(result);
+    } else {
+        res.sendStatus(500);
+    }
+};
 //
 // const updateAccountToken: any = async (req: Request, res: Response) => {
 //     if (!req.body) return res.sendStatus(400);
@@ -186,9 +181,9 @@ export default {
     createAccount,
     updateAccount,
     deleteAccount,
-    getAccountTokensByAccountId
+    getAccountTokensByAccountId,
+    createAccountToken
     // ,
-    // createAccountToken,
     // updateAccountToken,
     // deleteAccountToken
 };
