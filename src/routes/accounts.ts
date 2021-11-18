@@ -12,7 +12,7 @@ accountRouter.put('/api/accounts/:id', permit([Role.ANONYMOUS, Role.USER, Role.A
 accountRouter.delete('/api/accounts/:id', permit([Role.ADMIN]), controller.deleteAccount);
 accountRouter.get('/api/accounts/:id/tokens', permit([Role.ANONYMOUS, Role.USER, Role.ADMIN]), controller.getAccountTokensByAccountId);
 accountRouter.post('/api/accounts/:id/tokens', permit([Role.ANONYMOUS, Role.USER, Role.ADMIN]), controller.createAccountToken);
-// accountRouter.put('/api/accounts/:id/tokens', permit([Role.ANONYMOUS, Role.USER, Role.ADMIN]), controller.updateAccountToken);
+accountRouter.put('/api/accounts/:id/tokens', permit([Role.ANONYMOUS, Role.USER, Role.ADMIN]), controller.updateAccountToken);
 // accountRouter.delete('/api/accounts/:id/tokens', permit([Role.ADMIN]), controller.deleteAccountToken);
 
 

@@ -112,41 +112,37 @@ const createAccountToken: any = async (req: Request, res: Response) => {
         res.sendStatus(500);
     }
 };
-//
-// const updateAccountToken: any = async (req: Request, res: Response) => {
-//     if (!req.body) return res.sendStatus(400);
-//
-//     const accountSourceToken: String = req.body.sourceToken;
-//     const accountTargetToken: String = req.body.targetToken;
-//
-//     const account = await models.default.AccountModel.findByPk(req.params.id);
-//
-//     if (!account) {
-//         res.status(404).send(req.params.id);
-//     }
-//
-//     if (account.token !== accountSourceToken) {
-//         res.status(404).send(req.params.id);
-//     }
-//
-//
-//     const updated = await models.default.AccountModel.update(
-//         {
-//             token: accountTargetToken
-//         },
-//         {
-//             where: {
-//                 id: req.params.id,
-//                 token: accountSourceToken
-//             }
-//         });
-//
-//     if (updated == 1) {
-//         res.send(await models.default.AccountModel.findByPk(req.params.id));
-//     } else {
-//         res.sendStatus(500);
-//     }
-// };
+
+const updateAccountToken: any = async (req: Request, res: Response) => {
+    if (!req.body) return res.sendStatus(400);
+
+    const accountSourceToken: String = req.body.sourceToken;
+    const accountTargetToken: String = req.body.targetToken;
+
+    const account = await Account.default.findById(req.params.id);
+
+    if (!account) {
+        res.status(404).send(req.params.id);
+    }
+
+    if (account.token !== accountSourceToken) {
+        res.status(404).send(req.params.id);
+    }
+
+
+    await Account.default.findByIdAndUpdate(req.params.id,
+        {
+            token: accountTargetToken
+        });
+
+    let result = await Account.default.findById(req.params.id, 'token');
+
+    if (result) {
+        res.send(result);
+    } else {
+        res.sendStatus(500);
+    }
+};
 //
 // const deleteAccountToken: any = async (req: Request, res: Response) => {
 //     if (!req.body) return res.sendStatus(400);
@@ -182,9 +178,9 @@ export default {
     updateAccount,
     deleteAccount,
     getAccountTokensByAccountId,
-    createAccountToken
+    createAccountToken,
+    updateAccountToken
     // ,
-    // updateAccountToken,
     // deleteAccountToken
 };
 
