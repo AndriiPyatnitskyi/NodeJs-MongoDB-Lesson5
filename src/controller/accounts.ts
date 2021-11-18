@@ -143,33 +143,29 @@ const updateAccountToken: any = async (req: Request, res: Response) => {
         res.sendStatus(500);
     }
 };
-//
-// const deleteAccountToken: any = async (req: Request, res: Response) => {
-//     if (!req.body) return res.sendStatus(400);
-//
-//     const account = await models.default.AccountModel.findByPk(req.params.id);
-//
-//     if (!account) {
-//         res.status(404).send(req.params.id);
-//     }
-//
-//     const updated = await models.default.AccountModel.update(
-//         {
-//             token: ""
-//         },
-//         {
-//             where: {
-//                 id: req.params.id
-//             }
-//         });
-//
-//
-//     if (updated == 1) {
-//         res.send(await models.default.AccountModel.findByPk(req.params.id));
-//     } else {
-//         res.sendStatus(500);
-//     }
-// };
+
+const deleteAccountToken: any = async (req: Request, res: Response) => {
+    if (!req.body) return res.sendStatus(400);
+
+    const account = await Account.default.findById(req.params.id);
+
+    if (!account) {
+        res.status(404).send(req.params.id);
+    }
+
+    await Account.default.findByIdAndUpdate(req.params.id,
+        {
+            token: ''
+        });
+
+    let result = await Account.default.findById(req.params.id);
+
+    if (result) {
+        res.send(result);
+    } else {
+        res.sendStatus(500);
+    }
+};
 
 export default {
     getAccounts,
@@ -179,8 +175,7 @@ export default {
     deleteAccount,
     getAccountTokensByAccountId,
     createAccountToken,
-    updateAccountToken
-    // ,
-    // deleteAccountToken
+    updateAccountToken,
+    deleteAccountToken
 };
 
